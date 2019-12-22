@@ -41,6 +41,33 @@
 
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Run me and I will tell you the answer to the problem, eventually"
   [& args]
-  (println "Hello, World!"))
+  (solve-part-1 data/puzzle-input))
+
+(-main)
+;; => 3372463
+
+(defn fuel-for-module
+  "Calculate the fuel for a given module based on its mass.
+
+  Divide mass by 3, round down to Integer then subtract 2
+
+  Argument: mass - an integer
+  Return: fuel-required - as an integer"
+  [module-mass]
+  #_(/ module-mass 3) ;; we could divide then round down, but quot is simpler
+  (- (quot module-mass 3) 2))
+
+
+(defn solve-part-1
+  "Calculate the fuel required for each module,
+  and return the total amount of fuel required
+  for all modules"
+  [puzzle-input]
+  (reduce + (map fuel-for-module puzzle-input)))
+
+#_(solve-part-1 puzzle-input)
+;; => 3372463
+
+
