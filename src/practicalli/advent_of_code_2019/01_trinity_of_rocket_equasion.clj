@@ -94,3 +94,42 @@
 
 ;; http://www.quil.info/sketches/local/0622589e4acd61f73d86eff09064deff308553905d58dfc10448cf244ce9fa24
 
+
+;; Taking a low level loop recur approach
+;; find the fuel for the mass,
+;; then find the fuel for the fuel
+;; keep going until no more fuel is needed for the fuel
+
+(defn total-fuel-for-module
+  "Calculate the fuel for a given module based on its mass.  Then calculate the fuel for the fuel.
+
+  `quot` is used to divide mass by 3 and return a whole number, then subtract 2 to get the amount of fuel required
+
+  Argument: mass - an integer
+  Return: total - total fuel-required as an integer"
+
+  [module-mass]
+  (loop [mass  module-mass
+         fuel  (- (quot mass 3) 2)
+         total 0]
+    (if (<= fuel 5)
+      (+ total fuel)
+      (recur fuel
+             (- (quot fuel 3) 2)
+             (+ total fuel)))))
+
+
+;; Two quick tests
+
+(total-fuel-for-module 14)
+
+(total-fuel-for-module 1969)
+
+
+;; The total fuel for all the modules
+
+(reduce +
+        (map total-fuel-for-module data/puzzle-input))
+
+
+
