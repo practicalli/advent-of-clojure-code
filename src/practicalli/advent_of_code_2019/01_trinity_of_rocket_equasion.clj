@@ -209,3 +209,73 @@
 (transduce add-values * [1 2 3 4 5])
 
 
+;; Back to the Advent of code challenge
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; We have our simple function to calculate
+;; the fuel required for a given mass
+
+(defn fuel-required
+  [mass]
+  (- (quot mass 3) 2))
+
+
+;; We can see the the individual fuel values for each mass
+(map fuel-required data/puzzle-input)
+
+;; and get the total
+
+(reduce +
+        (map fuel-required data/puzzle-input))
+
+;; We could convert this into a transformation
+;; passing just the `fuel-required` function to `map`
+;; which then returns a transducer
+
+(def xform
+  (comp
+    (map fuel-required)))
+
+;; Then use transduce to apply the transformation
+;; and `+` as the final reducing function
+;; to get the total fuel required
+(transduce xform + data/puzzle-input)
+
+;; As its simple, we could just write it out in one expression
+(transduce (map fuel-required) + data/puzzle-input)
+
+
+
+;; Using transduce for part 2
+;; using our existing fuel calculation function
+
+(transduce (map total-fuel-for-module)
+           +
+           data/puzzle-input)
+
+
+;; Using an iterate approach, we get the same results
+
+(defn fuel-delta [mass]
+  (->> (iterate fuel-required mass)
+       (rest)
+       (take-while pos?)
+       (reduce +)))
+
+(transduce (map fuel-delta) + data/puzzle-input)
+;; => 5055835
+
+(defn fuel*
+  [mass]
+  (->> (iterate fuel mass)
+       (drop 1)
+       (take-while pos?)
+       (apply +)))
+
+
+;; Final thoughts
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; The advantage of using transduce over reduce?
+;; - speed & memory
+;; - fewer allocations for intermediate structures
