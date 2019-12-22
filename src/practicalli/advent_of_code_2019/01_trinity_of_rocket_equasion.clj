@@ -133,3 +133,79 @@
 
 
 
+
+;; Using transducers to solve the challenge
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; What are tranducers
+;; A general pupose way of applying algorithmic transformations.
+;; They are a recipe on how to transform data,
+;; without knowing what that data is.
+
+;; Some of the `clojure.core` functions act as a transducer
+
+
+;; Previously we covered reduce and how it iterates
+;; a function over a collection of values
+
+;; That function can be simple:
+(reduce + [1 2 3 4 5])
+
+;; Or we can write our own function
+
+(reduce custom-algorithm (range 1000))
+
+;; Custom functions can become quite involved
+;; especially with nested expressions
+;; but its the same principle.
+(reduce +
+        (filter odd?
+                (map #(+ 7 %)
+                     (range 100))))
+
+;; A reducing function is just the way of referring
+;; to a function passed to `reduce`
+;; In the above example, the whole expression starting
+;; with filter is the reducing function
+
+
+;; We could abstract that algorithm and make it
+;; easier to use elsewhere.
+
+(def algorithm
+  (comp (map #(+ 7 %))
+        (filter odd?)))
+
+;; Notice that (filter odd?) and `(map #(+ 7 %))`
+;; to not take any values as arguments, they are missing
+;; `map` and `filter` return a transducer when only
+;; given a single function as an argument (eg. no value)
+
+;; Now the `transduce` function can be used
+;; with our `algorithm` to transform data
+
+(transduce algorithm + (range 100))
+;; => 2800
+
+;; We get the same results as the reduce
+;; however our code is more adaptable
+
+;; An initial value can also be added
+(transduce algorithm + -1000 (range 100))
+
+
+;; Define a name for our transformation
+;; comp sends the results of the first argument, `map`
+;; to the second argument, `take`
+
+(def add-values
+  (comp (map #(+ % 7))
+        (take 12)))
+
+;; The transformation is then applied over the
+;; collection of values
+;; the results are reduced using the `*` function
+
+(transduce add-values * [1 2 3 4 5])
+
+
