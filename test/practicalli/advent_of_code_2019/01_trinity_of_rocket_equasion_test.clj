@@ -1,6 +1,6 @@
 (ns practicalli.advent-of-code-2019.01-trinity-of-rocket-equasion-test
   (:require [clojure.test :refer :all]
-            [practicalli.advent-of-code-2019.01-trinity-of-rocket-equasion :refer :all]))
+            [practicalli.advent-of-code-2019.01-trinity-of-rocket-equasion :as :SUT]))
 
 (deftest a-test
   (testing "FIXME, I fail."

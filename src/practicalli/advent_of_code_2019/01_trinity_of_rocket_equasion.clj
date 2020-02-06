@@ -3,7 +3,7 @@
 ;;
 ;; Author: @practicalli
 ;;
-;; Day 1: The Tyranny of the Rocket Equation ---
+;; Day 1: The Tyranny of the Rocket Equation
 ;; Parts 1 & 2
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -40,14 +40,6 @@
 ;; To begin, get your puzzle input.
 
 
-(defn -main
-  "Run me and I will tell you the answer to the problem, eventually"
-  [& args]
-  (solve-part-1 data/puzzle-input))
-
-(-main)
-;; => 3372463
-
 (defn fuel-for-module
   "Calculate the fuel for a given module based on its mass.
 
@@ -59,6 +51,8 @@
   #_(/ module-mass 3) ;; we could divide then round down, but quot is simpler
   (- (quot module-mass 3) 2))
 
+#_(fuel-for-module 14)
+#_(fuel-for-module 100756)
 
 (defn solve-part-1
   "Calculate the fuel required for each module,
@@ -67,8 +61,18 @@
   [puzzle-input]
   (reduce + (map fuel-for-module puzzle-input)))
 
-#_(solve-part-1 puzzle-input)
-;; => 3372463
+(map fuel-for-module data/puzzle-input)
+
+
+(solve-part-1 data/puzzle-input)
+
+
+(defn -main
+  "Run me and I will tell you the answer to the problem, eventually"
+  [& args]
+  (solve-part-1 data/puzzle-input))
+
+#_(-main)
 
 
 
@@ -144,12 +148,13 @@
 
 ;; Some of the `clojure.core` functions act as a transducer
 
+(map total-fuel-for-module ,,,,)
 
 ;; Previously we covered reduce and how it iterates
 ;; a function over a collection of values
 
 ;; That function can be simple:
-(reduce + [1 2 3 4 5])
+(reduce * [1 2 3 4 5])
 
 ;; Or we can write our own function
 
@@ -173,8 +178,10 @@
 ;; easier to use elsewhere.
 
 (def algorithm
-  (comp (map #(+ 7 %))
-        (filter odd?)))
+  (comp (map #(+ 7 %) ,,,)
+        (filter odd?)
+        ,,,,
+        ,,,))
 
 ;; Notice that (filter odd?) and `(map #(+ 7 %))`
 ;; to not take any values as arguments, they are missing
@@ -264,6 +271,8 @@
 
 (transduce (map fuel-delta) + data/puzzle-input)
 ;; => 5055835
+
+
 
 (defn fuel*
   [mass]
